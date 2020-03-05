@@ -9,9 +9,9 @@ s.listen(1)
 dir = os.getcwd()+'/img/'
 
 def getRandomFile(path):
-  files = os.listdir(path)
-  index = random.randrange(0, len(files))
-  return files[index]
+    files = os.listdir(path)
+    index = random.randrange(0, len(files))
+    return files[index]
 
 def ascii_pixel(sys):
     getimg = getRandomFile(path=dir)
