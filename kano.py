@@ -1,10 +1,10 @@
-import socket,random,time,os,subprocess,select
+import socket,random,time,os,subprocess,select,errno
+from socket import error as socket_error
 
 s = socket.socket()
 print("socket Ok")
 
-port=2525
-s.bind(('0.0.0.0',port))
+s.bind(('0.0.0.0',2525))
 s.listen(1)
 
 dir = os.getcwd()+'/img/'
@@ -43,5 +43,12 @@ def sock():
     c.close()
 
 while True:
-    sock()
-    time.sleep(1)
+    try:
+        sock()
+        time.sleep(1)
+    except SocketError as e:
+        if e.errno != errno.ECONNRESET:
+            raise
+        print("Error")
+        time.sleep(1)
+        sock()
