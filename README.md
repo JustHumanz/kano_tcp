@@ -7,6 +7,6 @@ all of 256-color terminal color was supported and work perfectly in gnu/linux te
 
 #### example
 you can use nc(netcat) or telnet but i recommended use nc
-```nc justhumanz.me 2525``` or ```telnet justhumanz.me```  
+```nc justhumanz.me 2525``` or ```telnet justhumanz.me 2525```  
 if you want print a pixel format just add ```pixel``` parameters  
 ```echo 'pixel' | nc justhumanz.me 2525```
