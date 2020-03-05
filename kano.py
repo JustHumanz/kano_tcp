@@ -7,7 +7,7 @@ port=2525
 s.bind(('0.0.0.0',port))
 s.listen(1)
 
-dir = '/home/humanz/py/py_socks/img/'
+dir = os.getcwd()+'/img/'
 
 def getRandomFile(path):
   files = os.listdir(path)
