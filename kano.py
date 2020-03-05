@@ -6,7 +6,6 @@ print("socket Ok")
 
 s.bind(('0.0.0.0',2525))
 s.listen(1)
-
 dir = os.getcwd()+'/img/'
 
 def getRandomFile(path):
@@ -31,13 +30,16 @@ def sock():
     ready = select.select([c], [], [], 0.1)
     if ready[0]:
         data = c.recv(1024)
-        fix = data.decode()
-        if "pixel" in fix:
-            c.send(ascii_pixel(sys='').encode())
-            c.close()
-        else:
-            c.send(ascii(sys='').encode())
-            c.close()
+        try:
+            fix = data.decode()
+            if "pixel" in fix:
+                c.send(ascii_pixel(sys='').encode())
+                c.close()
+            else:
+                c.send(ascii(sys='').encode())
+                c.close()
+        except Exception as e:
+            c.send("WTF you send to me? :(".encode())
     else:
         c.send(ascii(sys='').encode())
     c.close()
@@ -46,9 +48,7 @@ while True:
     try:
         sock()
         time.sleep(1)
-    except SocketError as e:
-        if e.errno != errno.ECONNRESET:
-            raise
+    except Exception as e:
         print("Error")
         time.sleep(1)
         sock()
