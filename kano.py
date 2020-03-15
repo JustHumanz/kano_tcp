@@ -1,4 +1,4 @@
-import socket,random,time,os,subprocess,select,errno
+import socket,random,time,os,subprocess,select,errno,re
 from socket import error as socket_error
 
 s = socket.socket()
@@ -14,24 +14,32 @@ def getRandomFile(path):
     index = random.randrange(0, len(files))
     return files[index]
 
-def ascii(sys,pix):
+def ascii(sys,data):
     getimg = getRandomFile(path=dir)
     note = ""
+    def command(data):
+        if data == "pixel":
+            fil = "--pixel"
+            return(str(fil))
 
-    def command1(pix):
-        if pix == True:
-            pix_command = "--pixel"
-            return(str(pix_command))
+        elif data == "center":
+            fil = "--center"
+            return(str(fil))
+
+        elif re.match(r'^(center|pixel) (center|pixel)', data):
+            fil = "--center --pixel"
+            return(str(fil))
+
         else:
-            pix_command = ""
-            return(str(pix_command))
+            fil = ""
+            return(str(fil))
 
-    cmd = f'im2a \'{dir}{getimg}\' {command1(pix)}'
+    cmd = f'im2a \'{dir}{getimg}\' {command(data)}'
     if "unknown" in getimg:
         note = "if you know the source you can tell me\nTwitter: @Aldin_Py\nEmail: humanz@justhumanz.me"
     else:
         note = "Created by Just_Humanz\nTwitter: @Aldin_Py\nEmail: humanz@justhumanz.me\nIG: aldin0x1101"
-    sys = subprocess.check_output(cmd.rstrip(), shell=True).decode('utf-8').rstrip("\n")+f"\nsource: {getimg}\n========================\n{note}"
+    sys = subprocess.check_output(cmd, shell=True).decode('utf-8').rstrip("\n")+f"\nsource: {getimg}\n========================\n{note}"
     return(str(sys))
 
 def sock():
@@ -42,17 +50,18 @@ def sock():
     if ready[0]:
         data = c.recv(1024)
         try:
-            fix = data.decode()
-            if "pixel" in fix:
-                c.send(ascii(sys='',pix= True).encode())
+            fix = data.decode().rstrip()
+            if "help" in fix:
+                c.send("\'help\' for show help menu\n\'pixel\' print image in pixel format\n\'center\' print image in center of terminal\n\'pixel center\' mah just like the name".encode())
                 c.close()
             else:
-                c.send(ascii(sys='',pix= False).encode())
+                c.send(ascii(sys='',data=fix).encode())
                 c.close()
         except Exception as e:
             c.send("WTF you send to me? :(".encode())
+            c.close()
     else:
-        c.send(ascii(sys='',pix= False).encode())
+        c.send(ascii(sys='',data='').encode())
     c.close()
 
 while True:
@@ -61,5 +70,6 @@ while True:
         time.sleep(1)
     except Exception as e:
         print("Error")
+        print(e)
         time.sleep(1)
         sock()
