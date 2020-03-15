@@ -13,14 +13,18 @@ def getRandomFile(path):
     index = random.randrange(0, len(files))
     return files[index]
 
-def ascii_pixel(sys):
+def ascii(sys,pix):
     getimg = getRandomFile(path=dir)
-    sys = subprocess.check_output(f'im2a {dir}{getimg} --pixel', shell=True).decode('utf-8').rstrip("\n")+f"\n source: {getimg}\n"
-    return(str(sys))
 
-def ascii(sys):
-    getimg = getRandomFile(path=dir)
-    sys = subprocess.check_output(f'im2a {dir}{getimg}', shell=True).decode('utf-8').rstrip("\n")+f"\n source: {getimg}\n"
+    def command1(pix):
+        if pix == True:
+            pix_command = "--pixel"
+            return(pix_command)
+        else:
+            pix_command = ""
+            return(pix_command)
+
+    sys = subprocess.check_output(f'im2a {dir}{getimg} {command1(pix)}', shell=True).decode('utf-8').rstrip("\n")+f"\n source: {getimg}\n"
     return(str(sys))
 
 def sock():
@@ -33,15 +37,15 @@ def sock():
         try:
             fix = data.decode()
             if "pixel" in fix:
-                c.send(ascii_pixel(sys='').encode())
+                c.send(ascii(sys='',pix= True).encode())
                 c.close()
             else:
-                c.send(ascii(sys='').encode())
+                c.send(ascii(sys='',pix= False).encode())
                 c.close()
         except Exception as e:
             c.send("WTF you send to me? :(".encode())
     else:
-        c.send(ascii(sys='').encode())
+        c.send(ascii(sys='',pix= False).encode())
     c.close()
 
 while True:
