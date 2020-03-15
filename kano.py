@@ -2,6 +2,7 @@ import socket,random,time,os,subprocess,select,errno
 from socket import error as socket_error
 
 s = socket.socket()
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 print("socket Ok")
 
 s.bind(('0.0.0.0',2525))
@@ -15,16 +16,22 @@ def getRandomFile(path):
 
 def ascii(sys,pix):
     getimg = getRandomFile(path=dir)
+    note = ""
 
     def command1(pix):
         if pix == True:
             pix_command = "--pixel"
-            return(pix_command)
+            return(str(pix_command))
         else:
             pix_command = ""
-            return(pix_command)
+            return(str(pix_command))
 
-    sys = subprocess.check_output(f'im2a {dir}{getimg} {command1(pix)}', shell=True).decode('utf-8').rstrip("\n")+f"\n source: {getimg}\n"
+    cmd = f'im2a \'{dir}{getimg}\' {command1(pix)}'
+    if "unknown" in getimg:
+        note = "if you know the source you can tell me\nTwitter: @Aldin_Py\nEmail: humanz@justhumanz.me"
+    else:
+        note = "Created by Just_Humanz\nTwitter: @Aldin_Py\nEmail: humanz@justhumanz.me\nIG: aldin0x1101"
+    sys = subprocess.check_output(cmd.rstrip(), shell=True).decode('utf-8').rstrip("\n")+f"\nsource: {getimg}\n========================\n{note}"
     return(str(sys))
 
 def sock():
