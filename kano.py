@@ -68,7 +68,7 @@ Content-Length: 2199999
     c.setblocking(0)
     ready = select.select([c], [], [], 0.1)
     if ready[0]:
-        data = c.recv(32768)
+        data = c.recv(507819)
         try:
             fix = data.decode().rstrip()
             if "GET" in fix:
