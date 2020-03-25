@@ -5,7 +5,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 print("socket Ok")
 
-s.bind(('0.0.0.0',2525))
+s.bind(('0.0.0.0',8085))
 s.listen(10)
 dir = os.getcwd()+'/img/'
 x = datetime.datetime.now()
