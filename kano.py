@@ -70,7 +70,7 @@ Date: """+x.strftime("%a, %d %b %X")+"""
     c, addr = s.accept()
     print("Connection address", addr)
     c.setblocking(0)
-    ready = select.select([c], [], [], 0.1)
+    ready = select.select([c], [], [], 10)
     if ready[0]:
         data = c.recv(1024)
         try:
