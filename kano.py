@@ -83,7 +83,10 @@ Date: """+x.strftime("%a, %d %b %X")+"""
                 else:
                     html = bytes(head+ascii(sys='',data='html'), encoding='utf8')
                     print(len(html))
-                    c.send(html,(len(html)))
+                    try:
+                        c.sendall(html,(len(html)))
+                    except InterruptedError as e:
+                        print(e)
                     c.close()
             elif "help" in fix:
                 c.send("\'help\' for show help menu\n\'pixel\' print image in pixel format\n\'center\' print image in center of terminal\n\'pixel center\' mah just like the name".encode())
