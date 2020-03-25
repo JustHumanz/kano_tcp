@@ -1,13 +1,14 @@
-import socket,random,time,os,subprocess,select,errno,re
+import socket,random,time,os,subprocess,select,errno,re,datetime
 from socket import error as socket_error
 
-s = socket.socket()
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 print("socket Ok")
 
 s.bind(('0.0.0.0',2525))
-s.listen(1)
+s.listen(10)
 dir = os.getcwd()+'/img/'
+x = datetime.datetime.now()
 
 def getRandomFile(path):
     files = os.listdir(path)
@@ -60,15 +61,18 @@ def sock():
 HTTP/1.1 200 OK
 Cache-Control: public, max-age=60
 Content-Type: text/html; charset=utf-8
-Server: python
-Content-Length: 2199999
+Server: Humanz_Py
+Date: """+x.strftime("%a, %d %b %X")+"""
+
 """
+
+
     c, addr = s.accept()
     print("Connection address", addr)
     c.setblocking(0)
     ready = select.select([c], [], [], 0.1)
     if ready[0]:
-        data = c.recv(507819)
+        data = c.recv(1024)
         try:
             fix = data.decode().rstrip()
             if "GET" in fix:
