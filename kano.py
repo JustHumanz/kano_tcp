@@ -70,7 +70,7 @@ Date: """+x.strftime("%a, %d %b %X")+"""
     c, addr = s.accept()
     print("Connection address", addr)
     c.setblocking(0)
-    ready = select.select([c], [], [], 10)
+    ready = select.select([c], [], [], 0.1)
     if ready[0]:
         data = c.recv(1024)
         try:
@@ -81,12 +81,8 @@ Date: """+x.strftime("%a, %d %b %X")+"""
                     c.send(bytes(html, encoding='utf8'))
                     c.close()
                 else:
-                    html = bytes(head+ascii(sys='',data='html'), encoding='utf8')
-                    print(len(html))
-                    try:
-                        c.sendall(html,(len(html)))
-                    except InterruptedError as e:
-                        print(e)
+                    html = head+ascii(sys='',data='html')
+                    c.send(bytes(html, encoding='utf8'))
                     c.close()
             elif "help" in fix:
                 c.send("\'help\' for show help menu\n\'pixel\' print image in pixel format\n\'center\' print image in center of terminal\n\'pixel center\' mah just like the name".encode())
